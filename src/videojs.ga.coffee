@@ -49,8 +49,6 @@ videojs.plugin 'ga', (options = {}) ->
 
   # init a few variables
   percentsAlreadyTracked = []
-  startTracked = false
-  endTracked = false
   seekStart = seekEnd = 0
   seeking = false
   eventLabel = ''
@@ -120,8 +118,6 @@ videojs.plugin 'ga', (options = {}) ->
       if player.mediainfo && player.mediainfo.id && player.mediainfo.id != currentVideo
         currentVideo = player.mediainfo.id
         percentsAlreadyTracked = []
-        startTracked = false
-        endTracked = false
         seekStart = seekEnd = 0
         seeking = false
 
@@ -157,9 +153,8 @@ videojs.plugin 'ga', (options = {}) ->
       return
 
   end = ->
-    if !isInAdState( player ) && !endTracked
+    if !isInAdState( player )
       sendbeacon( getEventName('end'), true )
-      endTracked = true
     return
 
   play = ->
@@ -171,9 +166,8 @@ videojs.plugin 'ga', (options = {}) ->
 
   start = ->
     if !isInAdState( player )
-      if "start" in eventsToTrack && !startTracked
+      if "start" in eventsToTrack
         sendbeacon( getEventName('start'), true )
-        startTracked = true
 
   pause = ->
     if !isInAdState( player )
