@@ -106,16 +106,10 @@ videojs.plugin 'ga', (options = {}) ->
     return adStateRegex.test( player.el().className )
 
   loaded = ->
-    console.log 'load ' +  Date.now()
+    console.log 'load el' +  eventLabel
     if !isInAdState( player )
       # Event label is Video Cloud ID | Name, or filename (Perform), or overridden
-      if defaultLabel
-        eventLabel = defaultLabel
-      else
-        if player.mediainfo && player.mediainfo.id
-          eventLabel = player.mediainfo.id + ' | ' + player.mediainfo.name
-        else
-          eventLabel = @currentSrc().split("/").slice(-1)[0].replace(/\.(\w{3,4})(\?.*)?$/i,'')
+      updatelabel()
       if player.mediainfo && player.mediainfo.id && player.mediainfo.id != currentVideo
         currentVideo = player.mediainfo.id
         percentsAlreadyTracked = []
@@ -126,6 +120,15 @@ videojs.plugin 'ga', (options = {}) ->
           sendbeacon( getEventName('video_load'), true )
 
       return
+
+  updateLabel = ->
+    if defaultLabel
+      eventLabel = defaultLabel
+    else
+      if player.mediainfo && player.mediainfo.id
+        eventLabel = player.mediainfo.id + ' | ' + player.mediainfo.name
+      else
+        eventLabel = @currentSrc().split("/").slice(-1)[0].replace(/\.(\w{3,4})(\?.*)?$/i,'')
 
   timeupdate = ->
     if !isInAdState( player )
@@ -162,6 +165,7 @@ videojs.plugin 'ga', (options = {}) ->
     console.log 'play el' +  eventLabel
     if !isInAdState( player )
       currentTime = Math.round(@currentTime())
+      updateLabel()
       sendbeacon( getEventName('play'), true, currentTime )
       seeking = false
       return
