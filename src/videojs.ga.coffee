@@ -106,7 +106,7 @@ videojs.plugin 'ga', (options = {}) ->
     return adStateRegex.test( player.el().className )
 
   loaded = ->
-    console.log 'load ' + new Date().now
+    console.log 'load ' + new Date().now()
     if !isInAdState( player )
       # Event label is Video Cloud ID | Name, or filename (Perform), or overridden
       if defaultLabel
@@ -159,7 +159,7 @@ videojs.plugin 'ga', (options = {}) ->
     return
 
   play = ->
-    console.log 'play ' + new Date().now
+    console.log 'play ' + new Date().now()
     if !isInAdState( player )
       currentTime = Math.round(@currentTime())
       sendbeacon( getEventName('play'), true, currentTime )
