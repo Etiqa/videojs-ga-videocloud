@@ -1,5 +1,5 @@
 /*
-* videojs-ga-videocloud - v0.4.2 - 2017-01-09
+* videojs-ga-videocloud - v0.4.2 - 2017-01-10
 * Based on videojs-ga 0.4.2
 * Copyright (c) 2017 Michael Bensoussan
 * Licensed MIT
@@ -96,6 +96,7 @@
       return adStateRegex.test(player.el().className);
     };
     loaded = function() {
+      console.log('load ' + new Date().now);
       if (!isInAdState(player)) {
         if (defaultLabel) {
           eventLabel = defaultLabel;
@@ -151,6 +152,7 @@
     };
     play = function() {
       var currentTime;
+      console.log('play ' + new Date().now);
       if (!isInAdState(player)) {
         currentTime = Math.round(this.currentTime());
         sendbeacon(getEventName('play'), true, currentTime);
