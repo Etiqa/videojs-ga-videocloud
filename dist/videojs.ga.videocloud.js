@@ -96,7 +96,6 @@
       return adStateRegex.test(player.el().className);
     };
     loaded = function() {
-      console.log('load el' + eventLabel);
       if (!isInAdState(player)) {
         updateLabel();
         if (player.mediainfo && player.mediainfo.id && player.mediainfo.id !== currentVideo) {
@@ -155,7 +154,6 @@
     };
     play = function() {
       var currentTime;
-      console.log('play el' + eventLabel);
       if (!isInAdState(player)) {
         currentTime = Math.round(this.currentTime());
         updateLabel();

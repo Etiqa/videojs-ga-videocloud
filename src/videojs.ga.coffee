@@ -106,7 +106,6 @@ videojs.plugin 'ga', (options = {}) ->
     return adStateRegex.test( player.el().className )
 
   loaded = ->
-    console.log 'load el' +  eventLabel
     if !isInAdState( player )
       # Event label is Video Cloud ID | Name, or filename (Perform), or overridden
       updateLabel()
@@ -162,7 +161,6 @@ videojs.plugin 'ga', (options = {}) ->
     return
 
   play = ->
-    console.log 'play el' +  eventLabel
     if !isInAdState( player )
       currentTime = Math.round(@currentTime())
       updateLabel()
