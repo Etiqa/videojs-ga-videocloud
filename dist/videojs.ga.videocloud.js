@@ -1,14 +1,14 @@
 /*
-* videojs-ga-videocloud - v0.4.2 - 2016-08-24
+* videojs-ga-videocloud - v0.4.2 - 2017-01-10
 * Based on videojs-ga 0.4.2
-* Copyright (c) 2016 Michael Bensoussan
+* Copyright (c) 2017 Michael Bensoussan
 * Licensed MIT
 */
 (function() {
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   videojs.plugin('ga', function(options) {
-    var adStateRegex, currentVideo, dataSetupOptions, defaultLabel, defaultsEventsToTrack, end, endTracked, error, eventCategory, eventLabel, eventNames, eventsToTrack, fullscreen, getEventName, isInAdState, loaded, parsedOptions, pause, percentsAlreadyTracked, percentsPlayedInterval, play, player, referrer, resize, seekEnd, seekStart, seeking, sendbeacon, sendbeaconOverride, start, startTracked, timeupdate, tracker, trackerName, volumeChange,
+    var adStateRegex, currentVideo, dataSetupOptions, defaultLabel, defaultsEventsToTrack, end, error, eventCategory, eventLabel, eventNames, eventsToTrack, fullscreen, getEventName, isInAdState, loaded, parsedOptions, pause, percentsAlreadyTracked, percentsPlayedInterval, play, player, referrer, resize, seekEnd, seekStart, seeking, sendbeacon, sendbeaconOverride, start, timeupdate, tracker, trackerName, updateLabel, volumeChange,
       _this = this;
     if (options == null) {
       options = {};
@@ -40,8 +40,6 @@
       trackerName = options.trackerName + '.';
     }
     percentsAlreadyTracked = [];
-    startTracked = false;
-    endTracked = false;
     seekStart = seekEnd = 0;
     seeking = false;
     eventLabel = '';
@@ -99,25 +97,26 @@
     };
     loaded = function() {
       if (!isInAdState(player)) {
-        if (defaultLabel) {
-          eventLabel = defaultLabel;
-        } else {
-          if (player.mediainfo && player.mediainfo.id) {
-            eventLabel = player.mediainfo.id + ' | ' + player.mediainfo.name;
-          } else {
-            eventLabel = this.currentSrc().split("/").slice(-1)[0].replace(/\.(\w{3,4})(\?.*)?$/i, '');
-          }
-        }
+        updateLabel();
         if (player.mediainfo && player.mediainfo.id && player.mediainfo.id !== currentVideo) {
           currentVideo = player.mediainfo.id;
           percentsAlreadyTracked = [];
-          startTracked = false;
-          endTracked = false;
           seekStart = seekEnd = 0;
           seeking = false;
           if (__indexOf.call(eventsToTrack, "video_load") >= 0) {
             sendbeacon(getEventName('video_load'), true);
           }
+        }
+      }
+    };
+    updateLabel = function() {
+      if (defaultLabel) {
+        return eventLabel = defaultLabel;
+      } else {
+        if (player.mediainfo && player.mediainfo.id) {
+          return eventLabel = player.mediainfo.id + ' | ' + player.mediainfo.name;
+        } else {
+          return eventLabel = this.currentSrc().split("/").slice(-1)[0].replace(/\.(\w{3,4})(\?.*)?$/i, '');
         }
       }
     };
@@ -149,24 +148,23 @@
       }
     };
     end = function() {
-      if (!isInAdState(player) && !endTracked) {
+      if (!isInAdState(player)) {
         sendbeacon(getEventName('end'), true);
-        endTracked = true;
       }
     };
     play = function() {
       var currentTime;
       if (!isInAdState(player)) {
         currentTime = Math.round(this.currentTime());
+        updateLabel();
         sendbeacon(getEventName('play'), true, currentTime);
         seeking = false;
       }
     };
     start = function() {
       if (!isInAdState(player)) {
-        if (__indexOf.call(eventsToTrack, "start") >= 0 && !startTracked) {
-          sendbeacon(getEventName('start'), true);
-          return startTracked = true;
+        if (__indexOf.call(eventsToTrack, "start") >= 0) {
+          return sendbeacon(getEventName('start'), true);
         }
       }
     };

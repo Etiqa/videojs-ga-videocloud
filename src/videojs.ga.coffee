@@ -49,8 +49,6 @@ videojs.plugin 'ga', (options = {}) ->
 
   # init a few variables
   percentsAlreadyTracked = []
-  startTracked = false
-  endTracked = false
   seekStart = seekEnd = 0
   seeking = false
   eventLabel = ''
@@ -110,18 +108,10 @@ videojs.plugin 'ga', (options = {}) ->
   loaded = ->
     if !isInAdState( player )
       # Event label is Video Cloud ID | Name, or filename (Perform), or overridden
-      if defaultLabel
-        eventLabel = defaultLabel
-      else
-        if player.mediainfo && player.mediainfo.id
-          eventLabel = player.mediainfo.id + ' | ' + player.mediainfo.name
-        else
-          eventLabel = @currentSrc().split("/").slice(-1)[0].replace(/\.(\w{3,4})(\?.*)?$/i,'')
+      updateLabel()
       if player.mediainfo && player.mediainfo.id && player.mediainfo.id != currentVideo
         currentVideo = player.mediainfo.id
         percentsAlreadyTracked = []
-        startTracked = false
-        endTracked = false
         seekStart = seekEnd = 0
         seeking = false
 
@@ -129,6 +119,15 @@ videojs.plugin 'ga', (options = {}) ->
           sendbeacon( getEventName('video_load'), true )
 
       return
+
+  updateLabel = ->
+    if defaultLabel
+      eventLabel = defaultLabel
+    else
+      if player.mediainfo && player.mediainfo.id
+        eventLabel = player.mediainfo.id + ' | ' + player.mediainfo.name
+      else
+        eventLabel = @currentSrc().split("/").slice(-1)[0].replace(/\.(\w{3,4})(\?.*)?$/i,'')
 
   timeupdate = ->
     if !isInAdState( player )
@@ -157,23 +156,22 @@ videojs.plugin 'ga', (options = {}) ->
       return
 
   end = ->
-    if !isInAdState( player ) && !endTracked
+    if !isInAdState( player )
       sendbeacon( getEventName('end'), true )
-      endTracked = true
     return
 
   play = ->
     if !isInAdState( player )
       currentTime = Math.round(@currentTime())
+      updateLabel()
       sendbeacon( getEventName('play'), true, currentTime )
       seeking = false
       return
 
   start = ->
     if !isInAdState( player )
-      if "start" in eventsToTrack && !startTracked
+      if "start" in eventsToTrack
         sendbeacon( getEventName('start'), true )
-        startTracked = true
 
   pause = ->
     if !isInAdState( player )
