@@ -152,7 +152,7 @@
     };
     play = function() {
       var currentTime;
-      console.log('play ' + eventLabel);
+      console.log('play el' + eventLabel);
       if (!isInAdState(player)) {
         currentTime = Math.round(this.currentTime());
         sendbeacon(getEventName('play'), true, currentTime);

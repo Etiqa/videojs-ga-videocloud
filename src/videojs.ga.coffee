@@ -159,7 +159,7 @@ videojs.plugin 'ga', (options = {}) ->
     return
 
   play = ->
-    console.log 'play ' +  eventLabel
+    console.log 'play el' +  eventLabel
     if !isInAdState( player )
       currentTime = Math.round(@currentTime())
       sendbeacon( getEventName('play'), true, currentTime )
