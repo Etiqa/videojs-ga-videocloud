@@ -109,7 +109,7 @@ videojs.plugin 'ga', (options = {}) ->
     console.log 'load el' +  eventLabel
     if !isInAdState( player )
       # Event label is Video Cloud ID | Name, or filename (Perform), or overridden
-      updatelabel()
+      updateLabel()
       if player.mediainfo && player.mediainfo.id && player.mediainfo.id != currentVideo
         currentVideo = player.mediainfo.id
         percentsAlreadyTracked = []

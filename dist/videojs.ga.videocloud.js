@@ -98,7 +98,7 @@
     loaded = function() {
       console.log('load el' + eventLabel);
       if (!isInAdState(player)) {
-        updatelabel();
+        updateLabel();
         if (player.mediainfo && player.mediainfo.id && player.mediainfo.id !== currentVideo) {
           currentVideo = player.mediainfo.id;
           percentsAlreadyTracked = [];
