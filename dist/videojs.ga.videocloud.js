@@ -96,7 +96,7 @@
       return adStateRegex.test(player.el().className);
     };
     loaded = function() {
-      console.log('load ' + new Date().now);
+      console.log('load ' + new Date().now());
       if (!isInAdState(player)) {
         if (defaultLabel) {
           eventLabel = defaultLabel;
@@ -152,7 +152,7 @@
     };
     play = function() {
       var currentTime;
-      console.log('play ' + new Date().now);
+      console.log('play ' + new Date().now());
       if (!isInAdState(player)) {
         currentTime = Math.round(this.currentTime());
         sendbeacon(getEventName('play'), true, currentTime);
