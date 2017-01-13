@@ -1,5 +1,5 @@
 /*
-* videojs-ga-videocloud - v0.4.2 - 2017-01-10
+* videojs-ga-videocloud - v0.4.2 - 2017-01-13
 * Based on videojs-ga 0.4.2
 * Copyright (c) 2017 Michael Bensoussan
 * Licensed MIT
@@ -8,7 +8,7 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   videojs.plugin('ga', function(options) {
-    var adStateRegex, currentVideo, dataSetupOptions, defaultLabel, defaultsEventsToTrack, end, error, eventCategory, eventLabel, eventNames, eventsToTrack, fullscreen, getEventName, isInAdState, loaded, parsedOptions, pause, percentsAlreadyTracked, percentsPlayedInterval, play, player, referrer, resize, seekEnd, seekStart, seeking, sendbeacon, sendbeaconOverride, start, timeupdate, tracker, trackerName, updateLabel, volumeChange,
+    var ISIBehaviorEnabled, adStateRegex, currentVideo, dataSetupOptions, defaultLabel, defaultsEventsToTrack, end, error, eventCategory, eventLabel, eventNames, eventsToTrack, fullscreen, getEventName, isInAdState, loaded, parsedOptions, pause, percentsAlreadyTracked, percentsPlayedInterval, play, player, referrer, resize, seekEnd, seekStart, seeking, sendbeacon, sendbeaconOverride, start, timeupdate, tracker, trackerName, updateLabel, volumeChange,
       _this = this;
     if (options == null) {
       options = {};
@@ -30,6 +30,7 @@
     defaultsEventsToTrack = ['player_load', 'video_load', 'percent_played', 'start', 'end', 'seek', 'play', 'pause', 'resize', 'volume_change', 'error', 'fullscreen'];
     eventsToTrack = options.eventsToTrack || dataSetupOptions.eventsToTrack || defaultsEventsToTrack;
     percentsPlayedInterval = options.percentsPlayedInterval || dataSetupOptions.percentsPlayedInterval || 10;
+    ISIBehaviorEnabled = options.ISIBehaviorEnabled || false;
     eventCategory = options.eventCategory || dataSetupOptions.eventCategory || 'Brightcove Player';
     defaultLabel = options.eventLabel || dataSetupOptions.eventLabel;
     sendbeaconOverride = options.sendbeaconOverride || false;
@@ -129,7 +130,7 @@
         for (percent = _i = 0; _i <= 99; percent = _i += percentsPlayedInterval) {
           if (percentPlayed >= percent && __indexOf.call(percentsAlreadyTracked, percent) < 0) {
             if (__indexOf.call(eventsToTrack, "percent_played") >= 0 && percentPlayed !== 0) {
-              sendbeacon(getEventName('percent_played'), true, percent);
+              sendbeacon(getEventName('percent_played') + '_' + percent, true, percent);
             }
             if (percentPlayed > 0) {
               percentsAlreadyTracked.push(percent);
@@ -221,14 +222,19 @@
       var href, iframe;
       this.on("loadedmetadata", loaded);
       this.on("timeupdate", timeupdate);
+      if (ISIBehaviorEnabled) {
+        this.on("actualPlay", play);
+        if (__indexOf.call(eventsToTrack, "start") >= 0) {
+          this.on("actualPlaying", start);
+        }
+      } else {
+        this.on("play", play);
+        if (__indexOf.call(eventsToTrack, "start") >= 0) {
+          this.on("playing", start);
+        }
+      }
       if (__indexOf.call(eventsToTrack, "end") >= 0) {
         this.on("ended", end);
-      }
-      if (__indexOf.call(eventsToTrack, "play") >= 0) {
-        this.on("play", play);
-      }
-      if (__indexOf.call(eventsToTrack, "start") >= 0) {
-        this.on("playing", start);
       }
       if (__indexOf.call(eventsToTrack, "pause") >= 0) {
         this.on("pause", pause);

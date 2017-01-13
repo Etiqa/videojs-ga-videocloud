@@ -30,6 +30,9 @@ videojs.plugin 'ga', (options = {}) ->
   eventsToTrack = options.eventsToTrack || dataSetupOptions.eventsToTrack || defaultsEventsToTrack
   percentsPlayedInterval = options.percentsPlayedInterval || dataSetupOptions.percentsPlayedInterval || 10
 
+  #configure special overrides for videos with dynamic disclaimer behavior (ISI)
+  ISIBehaviorEnabled = options.ISIBehaviorEnabled || false
+
   eventCategory = options.eventCategory || dataSetupOptions.eventCategory || 'Brightcove Player'
   # if you didn't specify a name, it will be 'guessed' from the video src after metadatas are loaded
   defaultLabel = options.eventLabel || dataSetupOptions.eventLabel
@@ -139,7 +142,7 @@ videojs.plugin 'ga', (options = {}) ->
         if percentPlayed >= percent && percent not in percentsAlreadyTracked
 
           if "percent_played" in eventsToTrack && percentPlayed != 0
-            sendbeacon( getEventName('percent_played'), true, percent )
+            sendbeacon( getEventName('percent_played') + '_' + percent, true, percent )
 
           if percentPlayed > 0
             percentsAlreadyTracked.push(percent)
@@ -227,9 +230,13 @@ videojs.plugin 'ga', (options = {}) ->
   @ready ->
     @on("loadedmetadata", loaded) # use loadstart?
     @on("timeupdate", timeupdate)
+    if ISIBehaviorEnabled
+      @on("actualPlay", play)
+      @on("actualPlaying", start) if "start" in eventsToTrack
+    else
+      @on("play", play)
+      @on("playing", start) if "start" in eventsToTrack
     @on("ended", end) if "end" in eventsToTrack
-    @on("play", play) if "play" in eventsToTrack
-    @on("playing", start) if "start" in eventsToTrack
     @on("pause", pause) if "pause" in eventsToTrack
     @on("volumechange", volumeChange) if "volume_change" in eventsToTrack
     @on("resize", resize) if "resize" in eventsToTrack
