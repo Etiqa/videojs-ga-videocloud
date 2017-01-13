@@ -142,7 +142,7 @@ videojs.plugin 'ga', (options = {}) ->
         if percentPlayed >= percent && percent not in percentsAlreadyTracked
 
           if "percent_played" in eventsToTrack && percentPlayed != 0
-            sendbeacon( getEventName('percent_played'), true, percent )
+            sendbeacon( getEventName('percent_played') + '_' + percent, true, percent )
 
           if percentPlayed > 0
             percentsAlreadyTracked.push(percent)
