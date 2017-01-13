@@ -224,14 +224,17 @@
       this.on("timeupdate", timeupdate);
       if (ISIBehaviorEnabled) {
         this.on("actualPlay", play);
+        if (__indexOf.call(eventsToTrack, "start") >= 0) {
+          this.on("actualPlaying", start);
+        }
       } else {
         this.on("play", play);
+        if (__indexOf.call(eventsToTrack, "start") >= 0) {
+          this.on("playing", start);
+        }
       }
       if (__indexOf.call(eventsToTrack, "end") >= 0) {
         this.on("ended", end);
-      }
-      if (__indexOf.call(eventsToTrack, "start") >= 0) {
-        this.on("playing", start);
       }
       if (__indexOf.call(eventsToTrack, "pause") >= 0) {
         this.on("pause", pause);

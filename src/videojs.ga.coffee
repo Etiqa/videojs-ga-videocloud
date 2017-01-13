@@ -29,6 +29,8 @@ videojs.plugin 'ga', (options = {}) ->
   ]
   eventsToTrack = options.eventsToTrack || dataSetupOptions.eventsToTrack || defaultsEventsToTrack
   percentsPlayedInterval = options.percentsPlayedInterval || dataSetupOptions.percentsPlayedInterval || 10
+
+  #configure special overrides for videos with dynamic disclaimer behavior (ISI)
   ISIBehaviorEnabled = options.ISIBehaviorEnabled || false
 
   eventCategory = options.eventCategory || dataSetupOptions.eventCategory || 'Brightcove Player'
@@ -230,10 +232,11 @@ videojs.plugin 'ga', (options = {}) ->
     @on("timeupdate", timeupdate)
     if ISIBehaviorEnabled
       @on("actualPlay", play)
+      @on("actualPlaying", start) if "start" in eventsToTrack
     else
       @on("play", play)
+      @on("playing", start) if "start" in eventsToTrack
     @on("ended", end) if "end" in eventsToTrack
-    @on("playing", start) if "start" in eventsToTrack
     @on("pause", pause) if "pause" in eventsToTrack
     @on("volumechange", volumeChange) if "volume_change" in eventsToTrack
     @on("resize", resize) if "resize" in eventsToTrack

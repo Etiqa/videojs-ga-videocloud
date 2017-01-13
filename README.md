@@ -133,6 +133,13 @@ This options goes with the ```percents_played``` event. Every ```percentsPlayedI
 
 **default:** 10
 
+### ISIBehaviorEnabled
+If set to true, tracks the media begin and play events based on events ```actualPlay``` and ```actualPlaying``` instead of using the default ones.
+actualPlay and actualPlaying are not standard videojs events so this means you have to esplicitly add those to your player instance.
+This is to help correctly track the behavior when a play on a video triggers the play of another video in the same player.
+**default:** ```false```
+
+
 ### debug
 
 If set to false, console logs will be omited
@@ -149,3 +156,5 @@ In the event you want to do something custom for all tracked events, use this op
 ## TODO
 
 - [ ] Support ad events
+- [ ] manage ```ISIBehaviorEnabled``` also according to a single player instance and not just to player config
+- [ ] better manage ```percentage_played``` events including percentage in action label ```ea```
