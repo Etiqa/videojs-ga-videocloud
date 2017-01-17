@@ -1,5 +1,5 @@
 /*
-* videojs-ga-videocloud - v0.4.2 - 2017-01-13
+* videojs-ga-videocloud - v0.4.2 - 2017-01-17
 * Based on videojs-ga 0.4.2
 * Copyright (c) 2017 Michael Bensoussan
 * Licensed MIT
@@ -140,7 +140,7 @@
         if (__indexOf.call(eventsToTrack, "seek") >= 0) {
           seekStart = seekEnd;
           seekEnd = currentTime;
-          if (Math.abs(seekStart - seekEnd) > 1) {
+          if (Math.abs(seekStart - seekEnd) > 1 && seekStart !== 0 && seekEnd !== duration) {
             seeking = true;
             sendbeacon(getEventName('seek_start'), false, seekStart);
             sendbeacon(getEventName('seek_end'), false, seekEnd);
