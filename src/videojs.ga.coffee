@@ -151,7 +151,7 @@ videojs.plugin 'ga', (options = {}) ->
         seekStart = seekEnd
         seekEnd = currentTime
         # if the difference between the start and the end are greater than 1 it's a seek.
-        if Math.abs(seekStart - seekEnd) > 1
+        if Math.abs(seekStart - seekEnd) > 1 && seekStart!= 0 && seekEnd != duration
           seeking = true
           sendbeacon( getEventName('seek_start'), false, seekStart )
           sendbeacon( getEventName('seek_end'), false, seekEnd )
