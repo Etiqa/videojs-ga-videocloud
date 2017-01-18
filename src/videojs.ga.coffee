@@ -56,6 +56,7 @@ videojs.plugin 'ga', (options = {}) ->
   seeking = false
   eventLabel = ''
   currentVideo = ''
+  previousDuration = 0
 
   eventNames = {
     "video_load": "Video Load",
@@ -151,15 +152,20 @@ videojs.plugin 'ga', (options = {}) ->
         seekStart = seekEnd
         seekEnd = currentTime
         # if the difference between the start and the end are greater than 1 it's a seek.
-        if Math.abs(seekStart - seekEnd) > 1 && seekStart!= 0 && seekEnd != duration
-          seeking = true
-          sendbeacon( getEventName('seek_start'), false, seekStart )
-          sendbeacon( getEventName('seek_end'), false, seekEnd )
+        if Math.abs(seekStart - seekEnd) > 1
+          # very specific case in which the ISI video ends and the other video starts
+          if previousDuration > 0 && previousDuration = seekStart && seekEnd = 0
+            previousDuration = 0
+          else
+            seeking = true
+            sendbeacon( getEventName('seek_start'), false, seekStart )
+            sendbeacon( getEventName('seek_end'), false, seekEnd )
 
       return
 
   end = ->
     if !isInAdState( player )
+      previousDuration = Math.round(@duration())
       sendbeacon( getEventName('end'), true )
     return
 
