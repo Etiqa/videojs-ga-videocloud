@@ -143,11 +143,7 @@
           seekStart = seekEnd;
           seekEnd = currentTime;
           if (Math.abs(seekStart - seekEnd) > 1) {
-            console.log("prev" + previousLabel);
-            console.log("current" + eventLabel);
-            console.log("prev_start" + previousDuration);
-            console.log("seek_start" + seekStart);
-            if (previousLabel !== eventLabel && previousDuration > 0 && previousDuration === seekStart && seekEnd === 0) {
+            if (previousLabel && previousLabel !== eventLabel && previousDuration > 0 && previousDuration === seekStart && seekEnd === 0) {
               previousDuration = 0;
               previousLabel = '';
             } else {
@@ -162,9 +158,7 @@
     end = function() {
       if (!isInAdState(player)) {
         previousDuration = Math.round(this.duration());
-        previousLabel = currentVideo;
-        console.log(previousDuration);
-        console.log(previousLabel);
+        previousLabel = eventLabel;
         sendbeacon(getEventName('end'), true);
       }
     };
