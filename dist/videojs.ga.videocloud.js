@@ -143,11 +143,11 @@
           seekStart = seekEnd;
           seekEnd = currentTime;
           if (Math.abs(seekStart - seekEnd) > 1) {
+            seeking = true;
             if (previousLabel && previousLabel !== eventLabel && previousDuration > 0 && previousDuration === seekStart && seekEnd === 0) {
               previousDuration = 0;
               previousLabel = '';
             } else {
-              seeking = true;
               sendbeacon(getEventName('seek_start'), false, seekStart);
               sendbeacon(getEventName('seek_end'), false, seekEnd);
             }

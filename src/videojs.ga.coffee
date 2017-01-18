@@ -154,12 +154,12 @@ videojs.plugin 'ga', (options = {}) ->
         seekEnd = currentTime
         # if the difference between the start and the end are greater than 1 it's a seek.
         if Math.abs(seekStart - seekEnd) > 1
-          # very specific case in which the ISI video ends and the other video starts
+          seeking = true
+        # very specific case in which the ISI video ends and the other video starts
           if previousLabel && previousLabel != eventLabel && previousDuration > 0 && previousDuration == seekStart && seekEnd == 0
             previousDuration = 0
             previousLabel = ''
           else
-            seeking = true
             sendbeacon( getEventName('seek_start'), false, seekStart )
             sendbeacon( getEventName('seek_end'), false, seekEnd )
 
