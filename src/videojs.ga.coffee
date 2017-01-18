@@ -158,7 +158,7 @@ videojs.plugin 'ga', (options = {}) ->
           console.log("prev" + previousLabel)
           console.log("current" + eventLabel)
           console.log("prev_start" + previousDuration)
-          console.log("seek_start" + seek start)
+          console.log("seek_start" + seekStart)
           if previousLabel != eventLabel && previousDuration > 0 && previousDuration == seekStart && seekEnd == 0
             previousDuration = 0
             previousLabel = ''
