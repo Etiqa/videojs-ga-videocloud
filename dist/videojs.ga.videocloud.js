@@ -8,7 +8,7 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   videojs.plugin('ga', function(options) {
-    var ISIBehaviorEnabled, adStateRegex, currentVideo, dataSetupOptions, defaultLabel, defaultsEventsToTrack, end, error, eventCategory, eventLabel, eventNames, eventsToTrack, fullscreen, getEventName, isInAdState, loaded, parsedOptions, pause, percentsAlreadyTracked, percentsPlayedInterval, play, player, previousDuration, previousVideo, referrer, resize, seekEnd, seekStart, seeking, sendbeacon, sendbeaconOverride, start, timeupdate, tracker, trackerName, updateLabel, volumeChange,
+    var ISIBehaviorEnabled, adStateRegex, currentVideo, dataSetupOptions, defaultLabel, defaultsEventsToTrack, end, error, eventCategory, eventLabel, eventNames, eventsToTrack, fullscreen, getEventName, isInAdState, loaded, parsedOptions, pause, percentsAlreadyTracked, percentsPlayedInterval, play, player, previousDuration, previousLabel, referrer, resize, seekEnd, seekStart, seeking, sendbeacon, sendbeaconOverride, start, timeupdate, tracker, trackerName, updateLabel, volumeChange,
       _this = this;
     if (options == null) {
       options = {};
@@ -46,7 +46,7 @@
     eventLabel = '';
     currentVideo = '';
     previousDuration = 0;
-    previousVideo = '';
+    previousLabel = '';
     eventNames = {
       "video_load": "Video Load",
       "percent_played": "Percent played",
@@ -143,9 +143,9 @@
           seekStart = seekEnd;
           seekEnd = currentTime;
           if (Math.abs(seekStart - seekEnd) > 1) {
-            if (previousVideo !== currentVideo && previousDuration > 0 && (previousDuration = seekStart && (seekEnd = 0))) {
+            if (previousLabel !== eventLabel && previousDuration > 0 && (previousDuration = seekStart && (seekEnd = 0))) {
               previousDuration = 0;
-              previousVideo = '';
+              previousLabel = '';
             } else {
               seeking = true;
               sendbeacon(getEventName('seek_start'), false, seekStart);
@@ -158,7 +158,9 @@
     end = function() {
       if (!isInAdState(player)) {
         previousDuration = Math.round(this.duration());
-        previousVideo = currentVideo;
+        previousLabel = currentVideo;
+        console.log(previousDuration);
+        console.log(previousLabel);
         sendbeacon(getEventName('end'), true);
       }
     };
