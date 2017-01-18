@@ -155,7 +155,11 @@ videojs.plugin 'ga', (options = {}) ->
         # if the difference between the start and the end are greater than 1 it's a seek.
         if Math.abs(seekStart - seekEnd) > 1
           # very specific case in which the ISI video ends and the other video starts
-          if previousLabel != eventLabel && previousDuration > 0 && previousDuration = seekStart && seekEnd = 0
+          console.log("prev" + previousLabel)
+          console.log("current" + eventLabel)
+          console.log("prev_start" + previousDuration)
+          console.log("seek_start" + seek start)
+          if previousLabel != eventLabel && previousDuration > 0 && previousDuration == seekStart && seekEnd == 0
             previousDuration = 0
             previousLabel = ''
           else
