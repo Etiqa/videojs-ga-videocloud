@@ -1,5 +1,5 @@
 /*
-* videojs-ga-videocloud - v0.4.2 - 2017-01-18
+* videojs-ga-videocloud - v0.4.2 - 2017-01-19
 * Based on videojs-ga 0.4.2
 * Copyright (c) 2017 Michael Bensoussan
 * Licensed MIT
@@ -183,7 +183,7 @@
       if (!isInAdState(player)) {
         currentTime = Math.round(this.currentTime());
         duration = Math.round(this.duration());
-        if (currentTime !== duration && !seeking) {
+        if (currentTime >= duration - 1 && !seeking) {
           sendbeacon(getEventName('pause'), true, currentTime);
         }
       }
