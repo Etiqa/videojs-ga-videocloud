@@ -183,7 +183,7 @@
       if (!isInAdState(player)) {
         currentTime = Math.round(this.currentTime());
         duration = Math.round(this.duration());
-        if (currentTime >= duration - 1 && !seeking) {
+        if (currentTime > duration - 1 && !seeking) {
           sendbeacon(getEventName('pause'), true, currentTime);
         }
       }

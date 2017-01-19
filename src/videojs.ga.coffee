@@ -190,7 +190,7 @@ videojs.plugin 'ga', (options = {}) ->
     if !isInAdState( player )
       currentTime = Math.round(@currentTime())
       duration = Math.round(@duration())
-      if currentTime >= duration - 1 && !seeking
+      if currentTime > duration - 1 && !seeking
         sendbeacon( getEventName('pause'), true, currentTime )
       return
 
